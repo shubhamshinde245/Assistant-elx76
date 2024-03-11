@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import OpenAI from "openai";
+
 import {
   useQuery,
   useAction,
@@ -7,6 +9,12 @@ import {
 } from "wasp/client/operations";
 
 const ChatPage = () => {
+  const API_KEY = "";
+  const openai = new OpenAI({
+    apiKey: API_KEY,
+    dangerouslyAllowBrowser: true,
+  });
+
   const { data: conversations, isLoading, error } = useQuery(getConversations);
   const createConversationFn = useAction(createConversation);
   const [question, setQuestion] = useState("");
@@ -14,8 +22,23 @@ const ChatPage = () => {
   if (isLoading) return "Loading...";
   if (error) return "Error: " + error;
 
-  const handleAskQuestion = () => {
-    createConversationFn({ question, response: "Response from GPT-3.5" });
+  const handleAskQuestion = async () => {
+    console.log(question);
+    // const response = "Response from GPT-3.5";
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "user",
+          content: question,
+        },
+      ],
+    });
+    const res = response.choices[0].message.content;
+
+    console.log(res);
+    createConversationFn({ question: question, response: res });
     setQuestion("");
   };
 
@@ -44,7 +67,7 @@ const ChatPage = () => {
           >
             <p>
               <strong>Question:</strong> {conv.question}
-            <br />
+              <br />
               <strong>Response:</strong> {conv.response}
             </p>
           </div>
