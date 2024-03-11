@@ -7,16 +7,16 @@ export const Layout = ({ children }) => {
   const { data: user } = useAuth();
 
   return (
-    <div className="flex  min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <header className="bg-primary-800 text-white p-4">
         <div className="container mx-auto px-4 py-2 flex justify-between">
           <Link to="/">
             <h1 className="text-xl2 font-semibold">Assistant</h1>
           </Link>
-          <p>
+          <div className="">
             {user ? (
               <span>
-                Hi, {getUsername(user)}!{" "}
+                Hi, {getUsername(user)} !{" "}
                 <button onClick={logout} className="text-xl2 underline">
                   (Log out)
                 </button>
@@ -26,7 +26,7 @@ export const Layout = ({ children }) => {
                 <h1 className="text-xl2 underline">Log in</h1>
               </Link>
             )}
-          </p>
+          </div>
         </div>
       </header>
       <main className="container mx-auto px-4 py-2 flex-grow">{children}</main>
