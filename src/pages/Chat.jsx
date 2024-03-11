@@ -29,6 +29,8 @@ const ChatPage = () => {
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
+        {"role": "system", 
+        "content": "You are a helpful assistant. You will reply with specific things asked. Also give me 2 recommendations of that might be good in similar context. At the end you will ask every user if they have more questions."},
         {
           role: "user",
           content: question,
